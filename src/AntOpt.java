@@ -1,3 +1,5 @@
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +11,7 @@ public class AntOpt {
     private final int m, iters;
     private final double evaporate;
     public final double Q, alpha, beta;
+    public List<Integer> history = new ArrayList<>();
 
     public AntOpt(List<Node> graph, int antsN, double evaporate, double alpha, double beta, double Q, int iters){
         this.graph = graph;
@@ -37,7 +40,7 @@ public class AntOpt {
         }
     }
 
-    public void run(Node start, Node end, int endIndex) {
+    public void run(Node start, Node end, int endIndex){
         double meanCost = 0;
 
         //create ants population
@@ -56,23 +59,20 @@ public class AntOpt {
 
                 // let one go through the whole graph
                 while (graphIter < graph.size() - 2){
-                    this.ants.get(i).move(end, false, endIndex);
+                    this.ants.get(i).move(end, false);
                     graphIter++;
                 }
                 // make final move to the end node
-                this.ants.get(i).move(end, true, endIndex);
-
-                Set<Node> visited = new HashSet<>(this.ants.get(i).visited);
-                if (visited.size() != this.graph.size()){
-                    System.out.println("Im here");
-                }
+                this.ants.get(i).move(end, true);
 
                 System.out.println("iteration " + (iter + 1) + ", ant " + (i + 1) + ", nodes visited:" + this.ants.get(i).visited + ", travel cost:" + this.ants.get(i).travelCost);
                 meanCost += this.ants.get(i).travelCost;
             }
             // after iteration passes
             modifyPheromone();
-            System.out.println("---------- mean cost:" + (meanCost / (this.m)) + " ------------");
+            meanCost /= this.m;
+            this.history.add((int)meanCost);
+            System.out.println("---------- mean cost:" + meanCost + " ------------");
             meanCost = 0;
         }
     }

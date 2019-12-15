@@ -29,6 +29,5 @@ class Edge {
     @Override
     public String toString() {
         return "to:"+this.t+" c="+this.c+", p="+this.p;
-//        return this.t.toString();
     }
 }
