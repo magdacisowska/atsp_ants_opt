@@ -4,6 +4,7 @@ public class Ant {
     public List<Node> visited;
     public double travelCost = 0;
     private AntOpt opt;
+    List<Double> taus = new ArrayList<>();
 
     public Ant(AntOpt opt) {
         this.opt = opt;
@@ -66,7 +67,8 @@ public class Ant {
 
         // leave certain value of pheromone on the chosen edge
         double deltaTau = this.opt.Q / edges.get(nextNodeIndex).getCost();
-        edges.get(nextNodeIndex).sumDeltaTau += deltaTau;           // add it to iteration-accumulating pheromone on the edge
+        edges.get(nextNodeIndex).sumDeltaTau += deltaTau;           // add it to iteration-accumulating pheromone on the edge (AS)
+        this.taus.add(deltaTau);                                    // track pheromone history to further use pheromone updates of the best ant only (MMAS)
         this.travelCost += edges.get(nextNodeIndex).getCost();      // increase iteration travel cost
     }
 }

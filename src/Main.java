@@ -5,8 +5,8 @@ import com.panayotis.gnuplot.style.Style;
 import java.util.*;
 
 public class Main {
-    public static void showSolution(List<Node> graph){
-        Collections.swap(graph, 0, 3);
+    public static void showSolution(List<Node> graph, int start){
+        Collections.swap(graph, 0, start);
         List<Node> solution = new ArrayList<>();
         solution.add(graph.get(0));
         int cost = 0;
@@ -27,7 +27,7 @@ public class Main {
             solution.add(bestNode);
             globalCost += cost;
         }
-        System.out.println(solution + " cost:" + globalCost);
+        System.out.println(solution + " cost:" + globalCost);                   // todo: sometimes doesnt show last as last
     }
 
     public static void plot(List<Integer> hist){
@@ -60,7 +60,7 @@ public class Main {
         for (Node n : graph){
             for (int i = 0; i < nodesN; i++) {
                 if (graph.get(i) != n) {
-                    cost = random.nextInt(13) + 7;
+                    cost = random.nextInt(10) + 7;
                     n.addEdge(graph.get(i), cost, 1.0 / (nodesN * cost));
                 }
             }
@@ -69,10 +69,10 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        List<Node> graph = init2(15);
-        AntOpt opt = new AntOpt(graph,10, 0.1, 0.1, 2.0, 1, 100);
+        List<Node> graph = init2(45);
+        AntOpt opt = new AntOpt(graph,20, 0.5, 0.1, 2.0, 1, 15);
         opt.run(graph.get(3), graph.get(0), 0);
-        showSolution(opt.graph);
+        showSolution(opt.graph, 3);
 
         plot(opt.history);
     }
@@ -289,5 +289,13 @@ public class Main {
             counter++;
         }
         return graph;
+    }
+
+    public static Edge whichEdge(Node n1, Node n2){
+        for (Edge edge : n1.getEdges()){
+            if (edge.destinationNode() == n2)
+                return edge;
+        }
+        return null;
     }
 }

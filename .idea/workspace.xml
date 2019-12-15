@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aa9a895e-dfff-4916-b265-698dabf83a32" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TSP.iml" beforeDir="false" afterPath="$PROJECT_DIR$/TSP.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TSP/Ant.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TSP/Ant.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TSP/AntOpt.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TSP/AntOpt.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/TSP/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/TSP/Main.class" afterDir="false" />
@@ -105,6 +103,17 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/AntOpt.java</url>
+          <line>88</line>
+          <option name="timeStamp" value="33" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/TSP$Main.ic" NAME="Main Coverage Results" MODIFIED="1576077918649" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />

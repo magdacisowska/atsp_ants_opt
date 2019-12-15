@@ -1,9 +1,4 @@
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class AntOpt {
     public List<Node> graph;
@@ -27,6 +22,27 @@ public class AntOpt {
     public void createAnts(){
         for (int i = 0; i < this.m; i++) {
             this.ants.add(new Ant(this));
+        }
+    }
+
+    public void modifyBest(List<Ant> antsList){
+        List <Ant> ants = antsList;
+
+        // sort ants with respect to iteration-travel-cost
+        ants.sort(new Comparator<Ant>() {
+            @Override
+            public int compare(Ant o1, Ant o2) {
+                return Double.compare(o1.travelCost, o2.travelCost);
+            }
+        });
+
+        // update pheromone with the best ant
+        Ant best = ants.get(0);
+        for (int i = 0; i < best.visited.size() - 1; i++) {
+            double tauUpdate = best.taus.get(i);
+            Edge edge = Main.whichEdge(best.visited.get(i), best.visited.get(i + 1));
+            double evaporated = edge.getPheromone() * (1 - this.evaporate);
+            edge.setPheromone(evaporated + tauUpdate);
         }
     }
 
@@ -65,11 +81,16 @@ public class AntOpt {
                 // make final move to the end node
                 this.ants.get(i).move(end, true);
 
-                System.out.println("iteration " + (iter + 1) + ", ant " + (i + 1) + ", nodes visited:" + this.ants.get(i).visited + ", travel cost:" + this.ants.get(i).travelCost);
+                System.out.println("iteration " + (iter + 1) + ", ant " + (i + 1) + ", nodes visited:" +
+                        this.ants.get(i).visited + ", travel cost:" + this.ants.get(i).travelCost);
                 meanCost += this.ants.get(i).travelCost;
             }
-            // after iteration passes
-            modifyPheromone();
+
+            // after iteration passes, perform the pheromone update
+            modifyBest(this.ants);              // MMAS
+//            modifyPheromone();                  // AS
+
+            // add mean cost to history for plotting
             meanCost /= this.m;
             this.history.add((int)meanCost);
             System.out.println("---------- mean cost:" + meanCost + " ------------");
