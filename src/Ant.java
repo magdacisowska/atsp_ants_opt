@@ -20,6 +20,7 @@ public class Ant {
 
         // reset travel cost
         this.travelCost = 0;
+        this.taus.clear();
     }
 
     public void move(Node endNode, boolean lastIter){

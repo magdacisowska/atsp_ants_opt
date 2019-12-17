@@ -14,6 +14,10 @@ class Edge {
         return this.c;
     }
 
+    public void editCost(int cost){
+        this.c = cost;
+    }
+
     public double getPheromone(){
         return this.p;
     }

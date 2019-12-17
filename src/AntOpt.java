@@ -7,8 +7,9 @@ public class AntOpt {
     private final double evaporate;
     public final double Q, alpha, beta;
     public List<Integer> history = new ArrayList<>();
+    private String algorithm;
 
-    public AntOpt(List<Node> graph, int antsN, double evaporate, double alpha, double beta, double Q, int iters){
+    public AntOpt(List<Node> graph, int antsN, double evaporate, double alpha, double beta, double Q, int iters, String algorithm){
         this.graph = graph;
         this.ants = new ArrayList<>();
         this.m = antsN;
@@ -17,6 +18,7 @@ public class AntOpt {
         this.Q = Q;
         this.alpha = alpha;
         this.beta = beta;
+        this.algorithm = algorithm;
     }
 
     public void createAnts(){
@@ -40,7 +42,7 @@ public class AntOpt {
         Ant best = ants.get(0);
         for (int i = 0; i < best.visited.size() - 1; i++) {
             double tauUpdate = best.taus.get(i);
-            Edge edge = Main.whichEdge(best.visited.get(i), best.visited.get(i + 1));
+            Edge edge = best.visited.get(i).connects(best.visited.get(i + 1));
             double evaporated = edge.getPheromone() * (1 - this.evaporate);
             edge.setPheromone(evaporated + tauUpdate);
         }
@@ -56,7 +58,16 @@ public class AntOpt {
         }
     }
 
-    public void run(Node start, Node end, int endIndex){
+    public void disturb(){
+        Random random = new Random();
+        // disturb randomly 20 edges (increase their cost)
+        for (int i = 0; i < 20; i++) {
+            this.graph.get(random.nextInt(40)).getEdges()
+                    .get(random.nextInt(40)).editCost(random.nextInt(50) + 25);
+        }
+    }
+
+    public void run(Node start, Node end){
         double meanCost = 0;
 
         //create ants population
@@ -64,6 +75,11 @@ public class AntOpt {
 
         //begin iterations
         for (int iter = 0; iter < this.iters; iter++) {
+            // disturb graph after 50 iterations - non-stationary TSP
+            if (iter == 50){
+                disturb();
+            }
+
             // reset ants
             for (int i = 0; i < this.m; i++) {
                 this.ants.get(i).reset(start);
@@ -74,7 +90,7 @@ public class AntOpt {
                 int graphIter = 0;
 
                 // let one go through the whole graph
-                while (graphIter < graph.size() - 2){
+                while (graphIter < this.graph.size() - 2){
                     this.ants.get(i).move(end, false);
                     graphIter++;
                 }
@@ -87,8 +103,10 @@ public class AntOpt {
             }
 
             // after iteration passes, perform the pheromone update
-            modifyBest(this.ants);              // MMAS
-//            modifyPheromone();                  // AS
+            if (this.algorithm.equals("MMAS"))
+                modifyBest(this.ants);              // MMAS
+            else
+                modifyPheromone();                  // AS
 
             // add mean cost to history for plotting
             meanCost /= this.m;

@@ -17,6 +17,14 @@ public class Node {
         return edges;
     }
 
+    public Edge connects(Node node){
+        for (Edge edge : this.getEdges()){
+            if (edge.destinationNode() == node)
+                return edge;
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return Character.toString(this.name);
