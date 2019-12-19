@@ -16,7 +16,9 @@ public class Ant {
         if (this.visited.size() > 0){
             this.visited.clear();
         }
-        this.visited.add(start);
+        Random random = new Random();
+        Node startNode = this.opt.graph.get(random.nextInt(this.opt.graph.size()));
+        this.visited.add(startNode);
 
         // reset travel cost
         this.travelCost = 0;
@@ -34,7 +36,7 @@ public class Ant {
             Edge neighbour = edges.get(i);
 
             // choose from yet unvisited and non-end-nodes or allow it to be end-node if lastIter is set
-            if((!this.visited.contains(neighbour.destinationNode()) && neighbour.destinationNode() != endNode) || (lastIter && neighbour.destinationNode() == endNode)) {
+            if((!this.visited.contains(neighbour.destinationNode()) /*&& neighbour.destinationNode() != endNode) || (lastIter && neighbour.destinationNode() == endNode*/)) {
                 double numerator = Math.pow(neighbour.getPheromone(), this.opt.beta) * Math.pow(1.0 / neighbour.getCost(), this.opt.beta);
                 denominator += numerator;
                 probabilities.add(numerator);

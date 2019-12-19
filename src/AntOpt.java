@@ -49,6 +49,7 @@ public class AntOpt {
     }
 
     public void modifyPheromone(){
+        // use information gathered by all ants
         for (Node node : this.graph){
             for (Edge edge : node.getEdges()){
                 double evaporated = edge.getPheromone() * (1 - this.evaporate);

@@ -51,6 +51,14 @@ public class Main {
         p.plot();
     }
 
+    public static void buildGraph(List<Node> graph){
+        for (Node n : graph){
+            for (Edge e : n.getEdges()){
+                System.out.println(n.toString() + " -> " + e.destinationNode().toString() + " [ label = \"" + e.getCost() + "\" ];");
+            }
+        }
+    }
+
     public static List<Node> init(int nodesN, int max, int min){
         List<Node> graph = new ArrayList<>();
         Random random = new Random();
@@ -77,13 +85,16 @@ public class Main {
     }
 
     // ---------------------------------------- main ------------------------------------------------------------------
-    public static void main(String[] args) {
+    public static void main(String[] args){
         List<Node> graph = init(45, 13, 7);
-//        AntOpt opt = new AntOpt(graph,20, 0.8, 1.0, 0.5, 1.0, 15, "AS");
-        AntOpt opt = new AntOpt(graph,20, 0.1, 1.0, 0.5, 1.0, 100, "MMAS");
+//        AntOpt opt = new AntOpt(graph,20, 0.8, 1.0, 0.5, 1.0, 20, "AS");
+        AntOpt opt = new AntOpt(graph,20, 0.1, 1.0, 0.5, 0.1, 300, "MMAS");
 
         opt.run(graph.get(3), graph.get(0));
-//        showSolution(opt.graph, 3);
+        showSolution(opt.graph, 3);
+
+        // print graph data in format suitable for http://www.webgraphviz.com/
+//        buildGraph(opt.graph);
 
         plot(opt.history);
     }
